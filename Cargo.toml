@@ -2,7 +2,9 @@
 name = "rbn"
 version = "0.1.0"
 authors = ["Evan Pratten <ewpratten@gmail.com>"]
-edition = "2018"
+edition = "2020"
+license-file = "LICENSE"
+repository = "https://github.com/Ewpratten/rbn"
 
 [dependencies]
 clap = "2.33.3"
