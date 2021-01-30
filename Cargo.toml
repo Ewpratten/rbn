@@ -7,6 +7,10 @@ license-file = "LICENSE"
 readme = "README.md"
 repository = "https://github.com/Ewpratten/rbn"
 
+[[bin]]
+path = "src/main.rs"
+name = "rbn"
+
 [dependencies]
 clap = "2.33.3"
 colored = "2.0.0"
