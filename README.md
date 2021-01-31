@@ -23,6 +23,27 @@ cargo install rbn
 
 I share a few pre-built binaries for systems I use on the [releases](https://github.com/Ewpratten/rbn/releases/latest) page.
 
+## Usage
+
+```
+# rbn --help
+
+Reverse Beacon Network Client 0.0.1
+Evan Pratten <ewpratten@gmail.com>
+
+USAGE:
+    rbn [OPTIONS] --callsign <callsign>
+
+FLAGS:
+    -h, --help       Prints help information
+    -V, --version    Prints version information
+
+OPTIONS:
+    -c, --callsign <callsign>        Your callsign (used to authenticate with RBN)
+    -f, --filtercall <filtercall>    Callsign to filter by
+
+```
+
 ## Screenshots
 
 ![Screenshot](./screenshot.png)
