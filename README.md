@@ -14,7 +14,9 @@ cargo install --path .
 
 ### From Crates.io
 
-*wip*
+```sh
+cargo install rbn
+```
 
 ### Pre-built Binaries
 
