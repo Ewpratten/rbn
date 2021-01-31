@@ -1,4 +1,4 @@
-# RBN
+# RBN [![Crates.io](https://img.shields.io/crates/v/rbn)](https://crates.io/crates/rbn)
 
 `rbn` is a small CLI interface to the [Reverse Beacon Network](https://reversebeacon.net), displaying all global network spots in real time as a formatted feed in a terminal.
 
