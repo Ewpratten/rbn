@@ -8,7 +8,6 @@ use std::str;
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::Arc;
 
-
 // Reverse beacon network endpoint information
 const RBN_SERVER: &str = "telnet.reversebeacon.net";
 const RBN_STANDARD_PORT: u16 = 7000;
@@ -28,11 +27,31 @@ fn main() {
                 .help("Your callsign (used to authenticate with RBN)")
                 .required(true),
         )
+        .arg(
+            Arg::with_name("filtercall")
+                .short("f")
+                .long("filtercall")
+                .takes_value(true)
+                .help("Callsign to filter by")
+                .required(false),
+        )
         .get_matches();
 
     // Get the callsign
     let callsign = matches.value_of("callsign").unwrap().to_uppercase();
     println!("Welcome {}!", callsign.italic().bright_blue());
+
+    // Get the filtercall
+    let has_filtercall = matches.is_present("filtercall");
+    let mut filtercall = "".to_string();
+
+    if has_filtercall {
+        filtercall = matches.value_of("filtercall").unwrap().to_uppercase();
+        println!(
+            "Filtering by callsign: {}",
+            filtercall.italic().bright_blue()
+        );
+    }
 
     // Set up required tcp connection to the remote server
     let endpoint = format!("{}:{}", RBN_SERVER, RBN_STANDARD_PORT);
@@ -71,7 +90,6 @@ fn main() {
     let mut stream_buffer = BufReader::new(stream);
     let mut next_line = String::new();
     while running.load(Ordering::SeqCst) {
-
         // Consume message from RBN
         stream_buffer
             .read_line(&mut next_line)
@@ -92,6 +110,15 @@ fn main() {
                 .pad_to_width_with_alignment(10, Alignment::Right)
                 .white()
                 .bold();
+
+            // Filtering logic
+            if has_filtercall {
+                if capture["spotter"] != filtercall && capture["spotted"] != filtercall {
+                    continue;
+                }
+            }
+
+            // PPrint the entry
             println!("{} spotted {} on {} KHz", &spotter, &spotted, &frequency)
         }
 
@@ -100,5 +127,4 @@ fn main() {
     }
 
     println!("{}", "\nExiting..".bright_black());
-
 }
