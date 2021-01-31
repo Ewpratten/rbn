@@ -1,5 +1,7 @@
 use clap::{App, Arg};
 use colored::*;
+use hambands::band::types::{Band, Hertz, KiloHertz};
+use hambands::search::get_band_by_name;
 use pad::{Alignment, PadStr};
 use regex::Regex;
 use std::io::{BufRead, BufReader, Read, Write};
@@ -17,7 +19,7 @@ const REGEX_PATTERN: &str = r"DX de (?P<spotter>[A-Z\d\\/-]+)-#:\s*(?P<frequency
 
 fn main() {
     let matches = App::new("Reverse Beacon Network Client")
-        .version("0.0.1")
+        .version("0.1.2")
         .author("Evan Pratten <ewpratten@gmail.com>")
         .arg(
             Arg::with_name("callsign")
@@ -35,6 +37,15 @@ fn main() {
                 .help("Callsign to filter by")
                 .required(false),
         )
+        .arg(
+            Arg::with_name("band")
+                .short("b")
+                .long("band")
+                .takes_value(true)
+                .help("Band name to filter by. This can be used multiple times to filter multiple bands")
+                .required(false)
+                .multiple(true),
+        )
         .get_matches();
 
     // Get the callsign
@@ -44,13 +55,29 @@ fn main() {
     // Get the filtercall
     let has_filtercall = matches.is_present("filtercall");
     let mut filtercall = "".to_string();
-
     if has_filtercall {
         filtercall = matches.value_of("filtercall").unwrap().to_uppercase();
         println!(
             "Filtering by callsign: {}",
             filtercall.italic().bright_blue()
         );
+    }
+
+    // Get all bands to filter by
+    let has_band_filter = matches.is_present("band");
+    let mut band_filter: Vec<&Band> = Vec::new();
+    if has_band_filter {
+        for band_name in matches.values_of("band").unwrap().collect::<Vec<_>>() {
+            // Get reference to actual band definition
+            let band = get_band_by_name(band_name);
+
+            // If this band is valid, add it to the filter
+            if band.is_ok() {
+                let band = band.unwrap();
+                band_filter.push(band);
+                println!("Adding band filter for: {}", band.name.white().italic());
+            }
+        }
     }
 
     // Set up required tcp connection to the remote server
@@ -114,6 +141,20 @@ fn main() {
             // Filtering logic
             if has_filtercall {
                 if capture["spotter"] != filtercall && capture["spotted"] != filtercall {
+                    continue;
+                }
+            }
+            if has_band_filter {
+                let frequency: KiloHertz = capture["frequency"].parse().unwrap();
+                let frequency: Hertz = (frequency * 1000.0) as Hertz;
+                let mut valid = false;
+                for band in band_filter.iter() {
+                    if band.low_frequency <= frequency && frequency <= band.high_frequency {
+                        valid = true;
+                        break;
+                    }
+                }
+                if !valid {
                     continue;
                 }
             }
