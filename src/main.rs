@@ -15,7 +15,6 @@ const RBN_STANDARD_PORT: u16 = 7000;
 
 // Regex pattern used for parsing raw data
 const REGEX_PATTERN: &str = r"DX de (?P<spotter>[A-Z\d\\/-]+)-#:\s*(?P<frequency>[\d.]+)\s+(?P<spotted>[A-Z\d\\/-]+)\s+(?P<mode>[A-Z\d]+)\s+(?P<snr>[\d-]+) dB\s+(?P<speed>\d+) [WPMBPS]+\s+(?P<message>[A-Za-z\\d ]+)\s*(?P<time>[0-9]{4})Z";
-// r"DX de ([A-Z\\d\\/-]+)-#:\\s*([\\d.]+)\\s+([A-Z\\d\\/-]+)\\s+([A-Z\\d]+)\\s+([\\d-]+) dB\\s+(\\d+) [WPMBPS]+\\s+([A-Za-z\\d ]+)\\s*([0-9]{4})Z";
 
 fn main() {
     let matches = App::new("Reverse Beacon Network Client")
