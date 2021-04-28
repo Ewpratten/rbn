@@ -3,8 +3,8 @@ name = "rbn"
 version = "0.1.3"
 authors = ["Evan Pratten <ewpratten@gmail.com>"]
 edition = "2018"
-license-file = "LICENSE"
-readme = "README.md"
+license-file = "../LICENSE"
+readme = "../README.md"
 repository = "https://github.com/Ewpratten/rbn"
 description = "A small CLI interface to the Reverse Beacon Network, displaying all global network spots in real time as a formatted feed in a terminal"
 
