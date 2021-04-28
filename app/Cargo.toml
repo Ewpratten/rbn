@@ -1,0 +1,21 @@
+[package]
+name = "rbn"
+version = "0.1.3"
+authors = ["Evan Pratten <ewpratten@gmail.com>"]
+edition = "2018"
+license-file = "LICENSE"
+readme = "README.md"
+repository = "https://github.com/Ewpratten/rbn"
+description = "A small CLI interface to the Reverse Beacon Network, displaying all global network spots in real time as a formatted feed in a terminal"
+
+[[bin]]
+path = "src/main.rs"
+name = "rbn"
+
+[dependencies]
+clap = "2.33.3"
+colored = "2.0.0"
+ctrlc = "3.1.7"
+pad = "0.1.6"
+hambands = "0.1.1"
+rbn-lib = { version = "0.1.2", path = "../lib" }
