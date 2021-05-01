@@ -12,3 +12,4 @@ description = "Access data from the Reverse Beacon Network in real time"
 regex = "1.4.3"
 hambands = "0.1.1"
 serde = { version = "1.0.125", features = ["derive"] }
+failure = "0.1.8"

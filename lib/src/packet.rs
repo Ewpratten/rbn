@@ -2,7 +2,7 @@
 
 use std::str::FromStr;
 
-use regex::{Captures, Regex};
+use regex::Regex;
 use serde::{Deserialize, Serialize};
 
 // Regex pattern used for parsing raw data
