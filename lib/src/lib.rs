@@ -15,8 +15,6 @@ use std::{
 
 use crate::packet::RbnPacket;
 
-// Regex pattern used for parsing raw data
-const REGEX_PATTERN: &str = r"DX de (?P<spotter>[A-Z\d\\/-]+)-#:\s*(?P<frequency>[\d.]+)\s+(?P<spotted>[A-Z\d\\/-]+)\s+(?P<mode>[A-Z\d]+)\s+(?P<snr>[\d-]+) dB\s+(?P<speed>\d+) [WPMBPS]+\s+(?P<message>[A-Za-z\\d ]+)\s*(?P<time>[0-9]{4})Z";
 
 pub struct RbnClient {
     bind_addr: String,
@@ -56,9 +54,6 @@ impl RbnClient {
                 .write(&format!("{}\r\n", callsign).as_bytes())
                 .unwrap();
 
-            // Configure regex for parsing incoming data
-            let incoming_regex = Regex::new(REGEX_PATTERN).unwrap();
-
             // Handle data
             let mut stream_buffer = BufReader::new(stream);
             let mut next_line = String::new();
@@ -72,11 +67,13 @@ impl RbnClient {
                 }
 
                 // Consume data from RBN
+                next_line.clear();
                 stream_buffer.read_line(&mut next_line).unwrap();
 
                 // Handle packets
-                for capture in incoming_regex.captures_iter(&next_line) {
-                    callback(RbnPacket::from_regex(capture));
+                let packet = next_line.parse();
+                if packet.is_ok() {
+                    callback(packet.unwrap());
                 }
             }
         }))

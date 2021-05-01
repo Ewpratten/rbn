@@ -117,7 +117,8 @@ fn main() {
                 .pad_to_width_with_alignment(8, Alignment::Right)
                 .bright_blue()
                 .bold(),
-            &frequency
+            &data
+                .frequency
                 .to_string()
                 .pad_to_width_with_alignment(10, Alignment::Right)
                 .white()
